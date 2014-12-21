@@ -3,14 +3,12 @@ package com.fallAlarm.server;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Properties;
-	    
-	   import javax.mail.Message;
+import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import com.capstone.data.Patient;
 import com.fallAlarm.jdbc.PatientDAO;
 	    
@@ -55,7 +53,7 @@ import com.fallAlarm.jdbc.PatientDAO;
 		public static void sendMsgToDoctor(String email,String pid){
 	     	
 	     	 final String fromEmail = "mvyas85@gmail.com"; 
-	         final String password = "minime.1912"; 
+	         final String password = "*****"; //insert your password !! 
 	         final String toEmail = email;
 	          
 	         System.out.println("TLSEmail Start");

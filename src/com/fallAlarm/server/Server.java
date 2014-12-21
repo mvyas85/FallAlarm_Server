@@ -18,6 +18,7 @@ public class Server extends Frame {
    private TextArea display;
    private double ax,ay,az;
    private double a_norm;
+   private int counter=1;
    
    
    public Server()
@@ -42,15 +43,14 @@ public class Server extends Frame {
          while ( true ) {
             connection = server.accept();
 
-     //       display.append( "Connection " + counter + " received from: " +
-      //         connection.getInetAddress().getHostName() );
+            display.append( "Connection " + counter + " received from: " +
+               connection.getInetAddress().getHostName() );
 
             input = new ObjectInputStream(connection.getInputStream() );
             
             DeviceData dataMsg = (DeviceData) input.readObject();
 
-//            display.append( "\nGot I/O streams\n" );
-//            display.append( "Connection successful\"\n" );
+            display.append( "Connection successful\"\n" );
 
             ax = dataMsg.getAccX();
             ay = dataMsg.getAccY();
@@ -59,27 +59,28 @@ public class Server extends Frame {
             int classRisk = CalculateClassRisk(ax,ay,az) ;
             
             PatientDataDAO.insertRecordIntoPatientData(dataMsg,classRisk);
-//            display.append( "Client message: \n");
-//            display.append("\nAcceleration Values: ");
-//            display.append("\n"+dataMsg.getAccX());
-//            display.append("\n"+dataMsg.getAccY());
-//            display.append("\n"+dataMsg.getAccZ());
-//            display.append("\n\nGyroscope Values:");
-//            display.append("\n"+dataMsg.getGyrX());
-//            display.append("\n"+dataMsg.getGyrY());
-//            display.append("\n"+dataMsg.getGyrZ());
-//            display.append("\n\nLocation Value:");
-//            display.append("\n"+dataMsg.getLocX());
-//            display.append("\n"+dataMsg.getLocY());
+            display.append( "Client message: \n");
+            display.append("Acceleration Values: ");
+            display.append("\n"+dataMsg.getAccX());
+            display.append("\t\t"+dataMsg.getAccY());
+            display.append("\t\t"+dataMsg.getAccZ());
+            display.append("\nGyroscope Values:");
+            display.append("\n"+dataMsg.getGyrX());
+            display.append("\t\t"+dataMsg.getGyrY());
+            display.append("\t\t"+dataMsg.getGyrZ());
+            display.append("\nLocation Value:");
+            display.append("\n"+dataMsg.getLocX());
+            display.append("\t\t"+dataMsg.getLocY());
         
             if(classRisk == 5){
-            	display.append("\n!!!!!!! Fall !!!!!!");
+            	display.append("\n\n!!!!!!!!!!!!! Fall !!!!!!!!!!!!!!!\n\n");
             	SendHTMLEmail.sendMsgToDoctor("4087079708@txt.att.net",dataMsg.getDeviceID());
             	SendHTMLEmail.sendMsgToDoctor("mvyas85@gmail.com",dataMsg.getDeviceID());	
             }
 
-//            display.append( "\nTransmission complete. Closing socket.\n\n" );
+           display.append( "\nTransmission complete. Closing socket.\n\n" );
             connection.close();
+            counter++;
          }
       }
       catch ( IOException e ) {
@@ -103,7 +104,7 @@ public class Server extends Frame {
 			 classRisk = 2;
 		 }else if(a_norm>=9.8 && a_norm<50){
 			 classRisk = 1;
-		 }else{			// (a_norm>=50){
+		 }else{	
 			 classRisk = 1;
 		 }
 	     return classRisk;  
